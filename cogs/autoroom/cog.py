@@ -4,7 +4,7 @@ from discord.ext import commands
 
 from core.checks import is_guild_owner
 
-from .commands import AddCommand, ListCommand
+from .commands import AddCommand, ListCommand, StatsCommand
 from .processing import OnVoiceStateUpdateProcessing
 
 
@@ -50,6 +50,12 @@ class AutoroomCog(commands.Cog):
     @commands.check(is_guild_owner)
     async def autoroom_list(self, ctx: commands.Context):
         command = ListCommand(ctx)
+        await command.process()
+    
+    @autoroom.command(name='stats')
+    async def autoroom_list(self, ctx: commands.Context):
+        await ctx.interaction.response.defer()
+        command = StatsCommand(ctx)
         await command.process()
 
     @autoroom.command(name='remove')

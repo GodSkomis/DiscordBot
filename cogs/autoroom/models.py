@@ -3,9 +3,9 @@ import logging
 
 import settings
 
-from typing import Dict, List, TYPE_CHECKING, Optional, Self
+from typing import Dict, List, TYPE_CHECKING, Optional, Self, Tuple
 from sqlalchemy.orm import Mapped, mapped_column, relationship, Session
-from sqlalchemy import ForeignKey, Column, Table, Index, exists, null, select, update
+from sqlalchemy import ForeignKey, Column, Table, Index, desc, exists, func, null, select, update
 
 from core.sql import Base
 
@@ -73,3 +73,9 @@ class AutoroomMetrics(Base):
                     ) \
                         .values(destroyed_at=get_datetime())
         await session.execute(query)
+
+    @classmethod
+    async def get_user_metrics(cls, session: Session, member_id: int) -> Tuple[int, Self]:
+        count_query = select(func.count()).where(AutoroomMetrics.channel_owner_id == member_id)
+        last_metric_query = select(AutoroomMetrics).where(AutoroomMetrics.destroyed_at.isnot(None)).order_by(desc(AutoroomMetrics.destroyed_at)).limit(1)
+        return (await session.scalar(count_query), await session.scalar(last_metric_query))

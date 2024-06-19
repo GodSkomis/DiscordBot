@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 import discord
 
 import settings
@@ -8,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from core.sql import DatabaseSessionManager
 
-from .models import Autooroom
+from .models import Autooroom, AutoroomMetrics
 from .processing import AbstractProcessing
 
 
@@ -94,3 +95,28 @@ class ListCommand(AbstractProcessing):
         response = '\n'.join(response_data)
         # await self._ctx.channel.send(response if response else settings.AUTOROOM_EMPTY_LIST_RESPONSE)
         await self._ctx.interaction.response.send_message(response if response else settings.AUTOROOM_EMPTY_LIST_RESPONSE)
+
+
+class StatsCommand(AbstractProcessing):
+    _ctx: commands.Context
+    _session: Session
+
+    def __init__(self, ctx: commands.Context):
+        self._ctx = ctx
+        
+    def _parse_total_time(self, metric: AutoroomMetrics) -> str:
+        delta = metric.destroyed_at - metric.created_at
+        hours, remainder = divmod(delta.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        return f"{hours:02}:{minutes:02}:{seconds:02}" if hours else f"{minutes:02}:{seconds:02}"
+
+    async def _get_content(self) -> str:
+            count, metric = await AutoroomMetrics.get_user_metrics(self._session, self._ctx.author.id)
+            if not count or not metric:
+                return 'Records not found'
+            return f'Overall, {count} channels were created, the last session ended on {metric.destroyed_at.strftime("%d.%m.%Y")} and lasted {self._parse_total_time(metric)}"'
+
+    async def process(self):
+        async with DatabaseSessionManager.session() as session:
+            self._session = session
+            await self._ctx.interaction.followup.send(content=await self._get_content())
