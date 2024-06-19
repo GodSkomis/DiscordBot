@@ -8,7 +8,7 @@ from typing import Dict, Self
 from aiobotocore.session import get_session
 from botocore.exceptions import ClientError
 
-from settings import BATHE_PATH, S3_CONF_FILE_NAME, S3_BOt_TOKEN_FILE_NAME
+from settings import BASE_PATH, S3_CONF_FILE_NAME, S3_BOt_TOKEN_FILE_NAME
 
 
 class S3Client:
@@ -30,7 +30,7 @@ class S3Client:
         self.session = get_session()
 
     def _read_config(self) -> Dict[str, str]:
-        with open(os.path.join(BATHE_PATH, S3_CONF_FILE_NAME), 'r') as file:
+        with open(os.path.join(BASE_PATH, S3_CONF_FILE_NAME), 'r') as file:
             data = json.load(file)
         if not data:
             raise ValueError("S3 configuration not found")

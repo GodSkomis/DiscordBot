@@ -1,15 +1,27 @@
+import datetime
 import os
+import pytz
 
 
-BATHE_PATH = os.path.dirname(os.path.realpath(__file__))
-SAVER_DEFAULT_PATH = os.path.join(BATHE_PATH, "_Data")
+BASE_PATH = os.path.dirname(os.path.realpath(__file__))
+SAVER_DEFAULT_PATH = os.path.join(BASE_PATH, "_Data")
 SAVER_DEFAULT_STRICT_MODE = False
     
-MUSIC_PAUSE_BETWEEN_SONGS = 1  # In seconds
+# COGS
 
+## OnJoin
 ON_MEMBER_JOIN_DEFAULT_REASON = "Auto role"
 
+## Autoroom
 AUTOROOM_DEFAULT_SUFFIX = "room"
+AUTOROOM_EMPTY_LIST_RESPONSE = "Records not found"
+
+
+# DB
+SQLALCHEMY_DATABASE_URL = f"sqlite+aiosqlite:///{os.path.join(BASE_PATH, "bot.db")}"
+TIME_ZONE = pytz.timezone('Europe/Kiev')
+GET_TIME_LAMBDA = lambda: datetime.datetime.now(TIME_ZONE)
+
 
 # S3
 S3_CONF_FILE_NAME = 's3.conf.json'
