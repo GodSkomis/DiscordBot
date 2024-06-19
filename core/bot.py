@@ -16,6 +16,8 @@ class SkomisBot(commands.Bot):
 
     async def setup_hook(self):
         # await self.load_extension("cogs.admin")
-
         await self.add_cog(AutoroomCog(self))
         await self.tree.sync()
+        for guild in self.guilds:
+            await self.tree.sync(guild)
+            
