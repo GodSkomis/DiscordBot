@@ -13,9 +13,6 @@ class AutoroomCog(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self._bot = bot
-        
-    def setup_commands(self) -> None:
-        self._bot.tree.add_command(self.autoroom)
 
     @commands.Cog.listener()
     async def on_voice_state_update(

@@ -6,6 +6,7 @@ from discord.ext import commands
 from discord.app_commands import CommandTree
 
 from cogs.autoroom.cog import AutoroomCog
+from cogs.memes.cog import MemeCog
 
 
 class SkomisBot(commands.Bot):
@@ -17,6 +18,7 @@ class SkomisBot(commands.Bot):
     async def setup_hook(self):
         # await self.load_extension("cogs.admin")
         await self.add_cog(AutoroomCog(self))
+        await self.add_cog(MemeCog(self))
         await self.tree.sync()
         for guild in self.guilds:
             await self.tree.sync(guild)

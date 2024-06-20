@@ -83,3 +83,10 @@ class S3Client:
             data = (await response["Body"].read()).decode('utf-8')
             logging.info('BOT TOKEN HAVE BEE LOADED SUCCESSFULY')
             return data
+
+    async def get_file_data(self, file_path: str):
+        async with self.get_client() as client:
+            response = await client.get_object(Bucket=self.bucket_name, Key=file_path)
+            data = (await response["Body"].read()).decode('utf-8')
+            logging.info(f'S3SERVICE: "{file_path} data loaded successfuly"')
+            return data

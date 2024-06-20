@@ -16,6 +16,16 @@ ON_MEMBER_JOIN_DEFAULT_REASON = "Auto role"
 AUTOROOM_DEFAULT_SUFFIX = "room"
 AUTOROOM_EMPTY_LIST_RESPONSE = "Records not found"
 
+## Meme
+BASE_MEME_ENDPOINT = 'https://meme-api.com/gimme'
+REDDIT_MEME_USER_AGENT = {
+    'User-Agent': 'SkomisDiscordBot'
+}
+REDDIT_SECRET_FILE = 'reddit.conf.json'
+
+GET_REDDIT_CLIENT_ID = lambda: os.getenv('REDDIT_CLIENT_ID')
+GET_REDDIT_CLIENT_SECRET = lambda: os.getenv('REDDIT_CLIENT_SECRET')
+
 
 # DB
 SQLALCHEMY_DATABASE_URL = f"sqlite+aiosqlite:///{os.path.join(BASE_PATH, "bot.db")}"
