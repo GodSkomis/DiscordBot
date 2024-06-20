@@ -1,0 +1,4 @@
+
+
+class MemeServiceException(Exception):
+    pass
